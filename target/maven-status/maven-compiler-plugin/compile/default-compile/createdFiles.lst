@@ -1,0 +1,17 @@
+com\knightgost\knighttowns\KnightTowns.class
+com\knightgost\knighttowns\player\PlayerData.class
+com\knightgost\knighttowns\data\PlayerXPManager.class
+com\knightgost\knighttowns\utils\BorderUtils.class
+com\knightgost\knighttowns\player\PlayerXPListener.class
+com\knightgost\knighttowns\player\PlayerManager.class
+com\knightgost\knighttowns\data\TownBossBarManager.class
+com\knightgost\knighttowns\listeners\TownProtectionListener.class
+com\knightgost\knighttowns\commands\TownCommand.class
+com\knightgost\knighttowns\data\TownRank.class
+com\knightgost\knighttowns\data\TownManager.class
+com\knightgost\knighttowns\data\TownPermission.class
+com\knightgost\knighttowns\player\PlayerXPListener$1.class
+com\knightgost\knighttowns\data\Town.class
+com\knightgost\knighttowns\utils\TownPerms.class
+com\knightgost\knighttowns\utils\TownPerms$1.class
+com\knightgost\knighttowns\listeners\TownMoveListener.class
