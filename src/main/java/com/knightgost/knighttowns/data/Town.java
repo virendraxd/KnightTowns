@@ -1,5 +1,7 @@
 package com.knightgost.knighttowns.data;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -10,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -21,8 +24,9 @@ public class Town {
 
     private final String name;
     private final UUID mayor; // Store UUID instead of Player isChunkClaimed
+    private final String creationDate;
     private Set<String> claimedChunks = new HashSet<>();
-    private Map<UUID, TownRank> members = new HashMap<>();
+    private final Map<UUID, TownRank> members = new HashMap<>();
 
     public void addMember(UUID uuid, TownRank rank) {
         if (uuid == null || rank == null) return;
@@ -54,6 +58,9 @@ public class Town {
     public Town(String name, UUID mayor) {
         this.name = name;
         this.mayor = mayor;
+        this.creationDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+
+        members.put(mayor, TownRank.MAYOR);
     }
 
     public String getName() {
@@ -67,6 +74,28 @@ public class Town {
     public Player getMayorPlayer() {
         return mayor == null ? null : Bukkit.getPlayer(mayor);
     }
+
+public String getMayorName() {
+    // Check all members for MAYOR rank
+    for (Map.Entry<UUID, TownRank> entry : members.entrySet()) {
+        if (entry.getValue() == TownRank.MAYOR) {
+            OfflinePlayer mayorPlayer = Bukkit.getOfflinePlayer(entry.getKey());
+            if (mayorPlayer != null && mayorPlayer.getName() != null) {
+                return mayorPlayer.getName();
+            } else {
+                return entry.getKey().toString().substring(0, 8);
+            }
+        }
+    }
+
+    // If no mayor is assigned
+    return "Unknown";
+}
+
+    public String getCreationDate() {
+        return creationDate;
+    }
+
 
     public UUID getTownMasterUUID() {
         // Iterate members and find who has TOWNMASTER rank

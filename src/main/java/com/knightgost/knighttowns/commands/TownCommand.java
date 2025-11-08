@@ -55,6 +55,7 @@ public class TownCommand implements CommandExecutor {
             case "list" -> handleList(player);
             case "showborder" -> handleShowBorder(player, args);
             case "claim" -> handleClaim(player);
+            case "info" -> handleInfo(player, args);
             // case "togglebossbar" ->  handleShowBossBar(player, args);
             case "addmember" ->  handleAddMember(player, args);
             case "removemember" ->  handleRemoveMember(player, args);
@@ -397,141 +398,161 @@ private void handleClaim(Player player) {
         }
     }
 
-private void handleSetRank(Player player, String[] args) {
-    if (args.length < 3) {
-        player.sendMessage("§eUsage: /town setrank <player> <rank>");
-        return;
-    }
-
-    Town town = TownManager.getTownByPlayer(player.getUniqueId());
-    if (town == null) {
-        player.sendMessage("§cYou are not a member of any town.");
-        return;
-    }
-
-    TownRank playerRank = town.getRank(player.getUniqueId());
-    if (playerRank == null) {
-        player.sendMessage("§cYou have no rank in this town!");
-        return;
-    }
-
-    String targetName = args[1];
-    OfflinePlayer offline = Bukkit.getOfflinePlayer(targetName);
-    if (offline == null || offline.getUniqueId() == null) {
-        player.sendMessage("§cCould not find that player (try exact name).");
-        return;
-    }
-    UUID targetUUID = offline.getUniqueId();
-
-    if (!town.isMember(targetUUID)) {
-        player.sendMessage("§cThat player is not a member of your town!");
-        return;
-    }
-
-    // Parse new rank
-    TownRank newRank;
-    try {
-        newRank = TownRank.valueOf(args[2].toUpperCase());
-    } catch (IllegalArgumentException e) {
-        player.sendMessage("§cInvalid rank. Use: TOWNMASTER, MAYOR, ASSISTANT, MEMBER, VISITOR");
-        return;
-    }
-
-    TownRank targetRank = town.getRank(targetUUID);
-
-    // Permission rules
-    if (playerRank == TownRank.TOWNMASTER) {
-        // Can change anyone's rank
-    } else if (playerRank == TownRank.MAYOR) {
-        // Cannot touch TownMaster or other Mayors
-        if (targetRank == TownRank.TOWNMASTER || targetRank == TownRank.MAYOR) {
-            player.sendMessage("§cYou cannot change the rank of a TownMaster or Mayor!");
+    private void handleSetRank(Player player, String[] args) {
+        if (args.length < 3) {
+            player.sendMessage("§eUsage: /town setrank <player> <rank>");
             return;
         }
-        if (newRank == TownRank.TOWNMASTER || newRank == TownRank.MAYOR) {
-            player.sendMessage("§cYou cannot promote someone to Mayor or TownMaster!");
+
+        Town town = TownManager.getTownByPlayer(player.getUniqueId());
+        if (town == null) {
+            player.sendMessage("§cYou are not a member of any town.");
             return;
         }
-    } else {
-        player.sendMessage("§cYou do not have permission to set ranks!");
-        return;
+
+        TownRank playerRank = town.getRank(player.getUniqueId());
+        if (playerRank == null) {
+            player.sendMessage("§cYou have no rank in this town!");
+            return;
+        }
+
+        String targetName = args[1];
+        OfflinePlayer offline = Bukkit.getOfflinePlayer(targetName);
+        if (offline == null || offline.getUniqueId() == null) {
+            player.sendMessage("§cCould not find that player (try exact name).");
+            return;
+        }
+        UUID targetUUID = offline.getUniqueId();
+
+        if (!town.isMember(targetUUID)) {
+            player.sendMessage("§cThat player is not a member of your town!");
+            return;
+        }
+
+        // Parse new rank
+        TownRank newRank;
+        try {
+            newRank = TownRank.valueOf(args[2].toUpperCase());
+        } catch (IllegalArgumentException e) {
+            player.sendMessage("§cInvalid rank. Use: TOWNMASTER, MAYOR, ASSISTANT, MEMBER, VISITOR");
+            return;
+        }
+
+        TownRank targetRank = town.getRank(targetUUID);
+
+        // Permission rules
+        if (playerRank == TownRank.TOWNMASTER) {
+            // Can change anyone's rank
+        } else if (playerRank == TownRank.MAYOR) {
+            // Cannot touch TownMaster or other Mayors
+            if (targetRank == TownRank.TOWNMASTER || targetRank == TownRank.MAYOR) {
+                player.sendMessage("§cYou cannot change the rank of a TownMaster or Mayor!");
+                return;
+            }
+            if (newRank == TownRank.TOWNMASTER || newRank == TownRank.MAYOR) {
+                player.sendMessage("§cYou cannot promote someone to Mayor or TownMaster!");
+                return;
+            }
+        } else {
+            player.sendMessage("§cYou do not have permission to set ranks!");
+            return;
+        }
+
+        town.addMember(targetUUID, newRank);
+        TownManager.saveTownToFile(plugin, town);
+        TownManager.addTown(town);
+
+        player.sendMessage("§aChanged §e" + offline.getName() + "§a's rank to §b" + newRank.name());
+        if (offline.isOnline()) {
+            ((Player) offline).sendMessage("§aYour rank in §e" + town.getName() + " §ais now §b" + newRank.name());
+        }
     }
 
-    town.addMember(targetUUID, newRank);
-    TownManager.saveTownToFile(plugin, town);
-    TownManager.addTown(town);
+    private void handleRemoveMember(Player player, String[] args) {
+        if (args.length < 2) {
+            player.sendMessage("§eUsage: /town removemember <player>");
+            return;
+        }
 
-    player.sendMessage("§aChanged §e" + offline.getName() + "§a's rank to §b" + newRank.name());
-    if (offline.isOnline()) {
-        ((Player) offline).sendMessage("§aYour rank in §e" + town.getName() + " §ais now §b" + newRank.name());
+        Town town = TownManager.getTownByPlayer(player.getUniqueId());
+        if (town == null) {
+            player.sendMessage("§cYou are not a member of any town.");
+            return;
+        }
+
+        TownRank playerRank = town.getRank(player.getUniqueId());
+        if (playerRank == null) {
+            player.sendMessage("§cYou have no rank in this town!");
+            return;
+        }
+
+        String targetName = args[1];
+        OfflinePlayer offline = Bukkit.getOfflinePlayer(targetName);
+        if (offline == null || offline.getUniqueId() == null) {
+            player.sendMessage("§cCould not find that player (try exact name).");
+            return;
+        }
+        UUID targetUUID = offline.getUniqueId();
+
+        if (!town.isMember(targetUUID)) {
+            player.sendMessage("§cThat player is not a member of your town!");
+            return;
+        }
+
+        TownRank targetRank = town.getRank(targetUUID);
+
+        // Permission rules
+        if (playerRank == TownRank.TOWNMASTER) {
+            // full access
+        } else if (playerRank == TownRank.MAYOR) {
+            if (targetRank == TownRank.TOWNMASTER || targetRank == TownRank.MAYOR) {
+                player.sendMessage("§cYou cannot remove a TownMaster or another Mayor!");
+                return;
+            }
+        } else {
+            player.sendMessage("§cYou do not have permission to remove members!");
+            return;
+        }
+
+        // Prevent self-removal unless OP
+        if (player.getUniqueId().equals(targetUUID)) {
+            player.sendMessage("§cYou cannot remove yourself from the town!");
+            return;
+        }
+
+        // Remove the member
+        town.removeMember(targetUUID);
+
+        // Save and update memory
+        TownManager.saveTownToFile(plugin, town);
+        TownManager.addTown(town);
+
+        player.sendMessage("§aRemoved §e" + offline.getName() + " §afrom your town.");
+        if (offline.isOnline()) {
+            ((Player) offline).sendMessage("§cYou have been removed from §e" + town.getName() + "§c.");
+        }
     }
-}
-
-private void handleRemoveMember(Player player, String[] args) {
+    
+private void handleInfo(Player player, String[] args) {
     if (args.length < 2) {
-        player.sendMessage("§eUsage: /town removemember <player>");
+        player.sendMessage("§eUsage: /town info <name>");
         return;
     }
 
-    Town town = TownManager.getTownByPlayer(player.getUniqueId());
+    String townName = args[1].toLowerCase();
+    Town town = TownManager.getTown(townName);
+
     if (town == null) {
-        player.sendMessage("§cYou are not a member of any town.");
+        player.sendMessage("§c⚠ Town not found!");
         return;
     }
 
-    TownRank playerRank = town.getRank(player.getUniqueId());
-    if (playerRank == null) {
-        player.sendMessage("§cYou have no rank in this town!");
-        return;
-    }
-
-    String targetName = args[1];
-    OfflinePlayer offline = Bukkit.getOfflinePlayer(targetName);
-    if (offline == null || offline.getUniqueId() == null) {
-        player.sendMessage("§cCould not find that player (try exact name).");
-        return;
-    }
-    UUID targetUUID = offline.getUniqueId();
-
-    if (!town.isMember(targetUUID)) {
-        player.sendMessage("§cThat player is not a member of your town!");
-        return;
-    }
-
-    TownRank targetRank = town.getRank(targetUUID);
-
-    // Permission rules
-    if (playerRank == TownRank.TOWNMASTER) {
-        // full access
-    } else if (playerRank == TownRank.MAYOR) {
-        if (targetRank == TownRank.TOWNMASTER || targetRank == TownRank.MAYOR) {
-            player.sendMessage("§cYou cannot remove a TownMaster or another Mayor!");
-            return;
-        }
-    } else {
-        player.sendMessage("§cYou do not have permission to remove members!");
-        return;
-    }
-
-    // Prevent self-removal unless OP
-    if (player.getUniqueId().equals(targetUUID)) {
-        player.sendMessage("§cYou cannot remove yourself from the town!");
-        return;
-    }
-
-    // Remove the member
-    town.removeMember(targetUUID);
-
-    // Save and update memory
-    TownManager.saveTownToFile(plugin, town);
-    TownManager.addTown(town);
-
-    player.sendMessage("§aRemoved §e" + offline.getName() + " §afrom your town.");
-    if (offline.isOnline()) {
-        ((Player) offline).sendMessage("§cYou have been removed from §e" + town.getName() + "§c.");
-    }
+    player.sendMessage("§8§m------------------------------");
+    player.sendMessage("§6🏙 Town Info: §e" + town.getName());
+    player.sendMessage("§7Mayor: §b" + town.getMayorName());
+    player.sendMessage("§7Claimed Chunks: §a" + town.getClaimedChunks().size());
+    player.sendMessage("§7Created On: §f" + town.getCreationDate());
+    player.sendMessage("§8§m------------------------------");
 }
-
-
 
 }
