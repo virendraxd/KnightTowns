@@ -1,38 +1,43 @@
+# =========================
+# Java / Maven Project
+# =========================
+
 # Maven build folder
 /target/
 
-# IntelliJ IDEA
-*.iml
-/.idea/
-
-# Eclipse
-/.classpath
-/.project
-/.settings/
-
-# Logs
-*.log
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# VS Code settings
-.vscode/
-
-# Maven build folder
-target/
-
-# Compiled class file
+# Compiled class files
 *.class
 
-# BlueJ files
+# Log files
+*.log
+
+# Crash logs
+hs_err_pid*
+replay_pid*
+
+# =========================
+# IDE / Editor Settings
+# =========================
+
+# IntelliJ IDEA
+*.iml
+.idea/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# VS Code
+.vscode/
+
+# BlueJ
 *.ctxt
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# =========================
+# Archive / Build Packages
+# =========================
 
-# Package Files #
 *.jar
 *.war
 *.nar
@@ -41,6 +46,12 @@ target/
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+# =========================
+# OS / Miscellaneous
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
