@@ -1,17 +1,5 @@
 package com.knightgost.knighttowns.data;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -21,6 +9,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class TownManager {
 
@@ -56,7 +49,30 @@ public class TownManager {
         }
         return null;
     }
-    
+
+    /**
+     * Calculates the town level based on its current size or resources.
+     * * @param town The Town object.
+     * @return The calculated level (or 0 if the town is null).
+     */
+    public static int getTownLevel(Town town) {
+        if (town == null) {
+            return 0;
+        }
+
+        // --- CUSTOM LEVELING LOGIC ---
+        // EXAMPLE: Level increases by 1 for every 5 members, starting at Level 1 for 1-4 members.
+        int population = town.getMembers().size();
+        if (population == 0) return 0;
+
+        // Formula: Level = (Population - 1) / 5 + 1
+        return ((population - 1) / 5) + 1;
+
+        // If the Town class had a dedicated level field, you would use:
+        // return town.getLevel();
+        // -----------------------------
+    }
+
     // ===== Helper: get the town a player (by UUID) is mayor of =====
     public static Town getPlayerTown(UUID playerUUID) {
         if (playerUUID == null) return null;
@@ -90,7 +106,7 @@ public class TownManager {
         return null;
     }
 
-    // ===== Saving a town to file ===== 
+    // ===== Saving a town to file =====
     public static void saveTownToFile(JavaPlugin plugin, Town town) {
         if (town == null || plugin == null) return;
 
@@ -159,6 +175,7 @@ public class TownManager {
                 } catch (IllegalArgumentException ignored) {}
             }
 
+            // NOTE: Need TownRank enum for this part to work. Assuming it exists.
             Town town = new Town(townName, townMasterUUID);
 
             // Load claimed chunks
@@ -184,6 +201,7 @@ public class TownManager {
                 for (String uuidStr : membersSection.getKeys(false)) {
                     try {
                         UUID uuid = UUID.fromString(uuidStr);
+                        // Assuming TownRank enum exists and is correctly imported/defined
                         TownRank rank = TownRank.valueOf(membersSection.getString(uuidStr, "VISITOR"));
                         town.addMember(uuid, rank);
                     } catch (IllegalArgumentException ignored) {}

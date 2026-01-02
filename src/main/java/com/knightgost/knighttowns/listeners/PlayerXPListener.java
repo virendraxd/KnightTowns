@@ -1,4 +1,4 @@
-package com.knightgost.knighttowns.player;
+package com.knightgost.knighttowns.service;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,8 +13,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import com.knightgost.knighttowns.data.PlayerXPManager;
 
 public class PlayerXPListener implements Listener {
 

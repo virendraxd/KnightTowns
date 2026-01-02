@@ -1,4 +1,4 @@
-package com.knightgost.knighttowns.data;
+package com.knightgost.knighttowns.service;
 
 import java.io.File;
 import java.io.IOException;

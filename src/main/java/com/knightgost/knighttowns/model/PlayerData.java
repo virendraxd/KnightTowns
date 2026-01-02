@@ -1,4 +1,4 @@
-package com.knightgost.knighttowns.player;
+package com.knightgost.knighttowns.service;
 
 import java.util.UUID;
 
@@ -9,8 +9,16 @@ public class PlayerData {
 
     public PlayerData(UUID uuid) {
         this.uuid = uuid;
+        // When loaded/created, default to 0 XP and Lvl 1
         this.xp = 0;
         this.level = 1;
+    }
+
+    // Constructor for loading existing data
+    public PlayerData(UUID uuid, int xp, int level) {
+        this.uuid = uuid;
+        this.xp = xp;
+        this.level = level;
     }
 
     public UUID getUUID() {
@@ -25,6 +33,12 @@ public class PlayerData {
         return level;
     }
 
+    // Helper to calculate XP required for the next level
+    public int getXPToNextLevel() {
+        // Formula: 100 + (level * 50)
+        return 100 + (level * 50);
+    }
+
     public void addXP(int amount) {
         this.xp += amount;
         checkLevelUp();
@@ -36,11 +50,7 @@ public class PlayerData {
             xp -= requiredXP;
             level++;
             requiredXP = getXPToNextLevel();
+            // In a real plugin, you would save data and notify the player here.
         }
-    }
-
-    private int getXPToNextLevel() {
-        // You can tweak this formula (e.g., exponential or linear)
-        return 100 + (level * 50);
     }
 }

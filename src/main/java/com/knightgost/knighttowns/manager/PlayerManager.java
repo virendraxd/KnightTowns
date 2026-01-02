@@ -1,4 +1,4 @@
-package com.knightgost.knighttowns.player;
+package com.knightgost.knighttowns.service;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
