@@ -1,4 +1,4 @@
-package com.knightgost.knighttowns.data;
+package com.knightgost.knighttowns.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,10 +11,8 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -29,17 +27,20 @@ public class Town {
     private final Map<UUID, TownRank> members = new HashMap<>();
 
     public void addMember(UUID uuid, TownRank rank) {
-        if (uuid == null || rank == null) return;
+        if (uuid == null || rank == null)
+            return;
         members.put(uuid, rank);
     }
 
     public void removeMember(UUID uuid) {
-        if (uuid == null) return;
+        if (uuid == null)
+            return;
         members.remove(uuid);
     }
 
     public boolean isMember(UUID uuid) {
-        if (uuid == null) return false;
+        if (uuid == null)
+            return false;
         return members.containsKey(uuid);
     }
 
@@ -75,32 +76,32 @@ public class Town {
         return mayor == null ? null : Bukkit.getPlayer(mayor);
     }
 
-public String getMayorName() {
-    // Check all members for MAYOR rank
-    for (Map.Entry<UUID, TownRank> entry : members.entrySet()) {
-        if (entry.getValue() == TownRank.MAYOR) {
-            OfflinePlayer mayorPlayer = Bukkit.getOfflinePlayer(entry.getKey());
-            if (mayorPlayer != null && mayorPlayer.getName() != null) {
-                return mayorPlayer.getName();
-            } else {
-                return entry.getKey().toString().substring(0, 8);
+    public String getMayorName() {
+        // Check all members for MAYOR rank
+        for (Map.Entry<UUID, TownRank> entry : members.entrySet()) {
+            if (entry.getValue() == TownRank.MAYOR) {
+                OfflinePlayer mayorPlayer = Bukkit.getOfflinePlayer(entry.getKey());
+                if (mayorPlayer != null && mayorPlayer.getName() != null) {
+                    return mayorPlayer.getName();
+                } else {
+                    return entry.getKey().toString().substring(0, 8);
+                }
             }
         }
-    }
 
-    // If no mayor is assigned
-    return "Unknown";
-}
+        // If no mayor is assigned
+        return "Unknown";
+    }
 
     public String getCreationDate() {
         return creationDate;
     }
 
-
     public UUID getTownMasterUUID() {
         // Iterate members and find who has TOWNMASTER rank
         for (Map.Entry<UUID, TownRank> entry : members.entrySet()) {
-            if (entry.getValue() == TownRank.TOWNMASTER) return entry.getKey();
+            if (entry.getValue() == TownRank.TOWNMASTER)
+                return entry.getKey();
         }
         return null;
     }
@@ -127,9 +128,11 @@ public String getMayorName() {
         Set<Chunk> chunks = new HashSet<>();
         for (String key : claimedChunks) {
             String[] parts = key.split(",");
-            if (parts.length != 3) continue;
+            if (parts.length != 3)
+                continue;
             World world = Bukkit.getWorld(parts[0]);
-            if (world == null) continue;
+            if (world == null)
+                continue;
             int x = Integer.parseInt(parts[1]);
             int z = Integer.parseInt(parts[2]);
             chunks.add(world.getChunkAt(x, z));
@@ -161,7 +164,8 @@ public String getMayorName() {
         Set<Vector> positions = new HashSet<>();
         for (String key : claimedChunks) {
             String[] parts = key.split(",");
-            if (parts.length != 3) continue;
+            if (parts.length != 3)
+                continue;
             int x = Integer.parseInt(parts[1]);
             int z = Integer.parseInt(parts[2]);
             positions.add(new Vector(x, 0, z));
@@ -169,42 +173,4 @@ public String getMayorName() {
         return positions;
     }
 
-    public void showChunkBorders(Player player) {
-        Set<Vector> positions = getClaimedChunkPositions();
-
-        for (Vector pos : positions) {
-            World world = player.getWorld(); // assuming chunks are in same world
-            int y = player.getLocation().getBlockY(); // can adjust to your preference
-
-            int startX = pos.getBlockX() << 4; // chunk start X 
-            int startZ = pos.getBlockZ() << 4; // chunk start Z
-            int endX = startX + 15;
-            int endZ = startZ + 15;
-
-            // Place blocks at 4 corners
-            setTempBlock(world, startX, y, startZ, Material.GLOWSTONE);
-            setTempBlock(world, endX, y, startZ, Material.GLOWSTONE);
-            setTempBlock(world, startX, y, endZ, Material.GLOWSTONE);
-            setTempBlock(world, endX, y, endZ, Material.GLOWSTONE);
-
-            // Optional: draw edges (lines along X and Z edges)
-            for (int x = startX; x <= endX; x++) {
-                setTempBlock(world, x, y, startZ, Material.GLOWSTONE);
-                setTempBlock(world, x, y, endZ, Material.GLOWSTONE);
-            }
-
-            for (int z = startZ; z <= endZ; z++) {
-                setTempBlock(world, startX, y, z, Material.GLOWSTONE);
-                setTempBlock(world, endX, y, z, Material.GLOWSTONE);
-            }
-        }
-    }
-
-    // Helper to place a temporary block for the player
-    private void setTempBlock(World world, int x, int y, int z, Material material) {
-        Block block = world.getBlockAt(x, y, z);
-        block.setType(material);
-        // Optional: schedule block to revert after some time
-        // Bukkit.getScheduler().runTaskLater(plugin, () -> block.setType(Material.AIR), 200L);
-    }
 }

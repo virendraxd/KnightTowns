@@ -11,7 +11,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.knightgost.knighttowns.data.Town;
+import com.knightgost.knighttowns.model.Town;
 
 public class BorderUtils {
 
@@ -32,10 +32,12 @@ public class BorderUtils {
         // Iterate through all claimed chunks
         for (String key : claimed) {
             String[] parts = key.split(",");
-            if (parts.length != 3) continue;
+            if (parts.length != 3)
+                continue;
 
             world = Bukkit.getWorld(parts[0]);
-            if (world == null) continue;
+            if (world == null)
+                continue;
 
             int cx = Integer.parseInt(parts[1]);
             int cz = Integer.parseInt(parts[2]);
@@ -51,7 +53,43 @@ public class BorderUtils {
             boolean west = !claimedSet.contains(world.getName() + "," + (cx - 1) + "," + cz);
             boolean east = !claimedSet.contains(world.getName() + "," + (cx + 1) + "," + cz);
 
-            // Place glowstone at corners where two edges meet
+            // North edge (top)
+            if (north) {
+                for (int x = startX; x <= endX; x++) {
+                    Location loc = getSurface(world, x, startZ);
+                    player.sendBlockChange(loc, Material.GOLD_BLOCK.createBlockData());
+                    previewBlocks.add(loc);
+                }
+            }
+
+            // South edge (bottom)
+            if (south) {
+                for (int x = startX; x <= endX; x++) {
+                    Location loc = getSurface(world, x, endZ);
+                    player.sendBlockChange(loc, Material.GOLD_BLOCK.createBlockData());
+                    previewBlocks.add(loc);
+                }
+            }
+
+            // West edge (left)
+            if (west) {
+                for (int z = startZ; z <= endZ; z++) {
+                    Location loc = getSurface(world, startX, z);
+                    player.sendBlockChange(loc, Material.GOLD_BLOCK.createBlockData());
+                    previewBlocks.add(loc);
+                }
+            }
+
+            // East edge (right)
+            if (east) {
+                for (int z = startZ; z <= endZ; z++) {
+                    Location loc = getSurface(world, endX, z);
+                    player.sendBlockChange(loc, Material.GOLD_BLOCK.createBlockData());
+                    previewBlocks.add(loc);
+                }
+            }
+
+            // Place glowstone at corners where two edges meet to highlight corners
             if (north && west) {
                 Location loc = getSurface(world, startX, startZ);
                 player.sendBlockChange(loc, Material.GLOWSTONE.createBlockData());
@@ -71,102 +109,6 @@ public class BorderUtils {
                 Location loc = getSurface(world, endX, endZ);
                 player.sendBlockChange(loc, Material.GLOWSTONE.createBlockData());
                 previewBlocks.add(loc);
-            }
-
-            // North edge (top)
-            if (north) {
-                // Place gold adjacent to west corner
-                if (west) {
-                    Location loc = getSurface(world, startX + 1, startZ);
-                    player.sendBlockChange(loc, Material.GOLD_BLOCK.createBlockData());
-                    previewBlocks.add(loc);
-                }
-                
-                // Place gold blocks every 8 blocks (starting from startX + 8)
-                for (int x = startX + 8; x < endX; x += 8) {
-                    Location loc = getSurface(world, x, startZ);
-                    player.sendBlockChange(loc, Material.GOLD_BLOCK.createBlockData());
-                    previewBlocks.add(loc);
-                }
-                
-                // Place gold adjacent to east corner
-                if (east) {
-                    Location loc = getSurface(world, endX - 1, startZ);
-                    player.sendBlockChange(loc, Material.GOLD_BLOCK.createBlockData());
-                    previewBlocks.add(loc);
-                }
-            }
-
-            // South edge (bottom)
-            if (south) {
-                // Place gold adjacent to west corner
-                if (west) {
-                    Location loc = getSurface(world, startX + 1, endZ);
-                    player.sendBlockChange(loc, Material.GOLD_BLOCK.createBlockData());
-                    previewBlocks.add(loc);
-                }
-                
-                // Place gold blocks every 8 blocks
-                for (int x = startX + 8; x < endX; x += 8) {
-                    Location loc = getSurface(world, x, endZ);
-                    player.sendBlockChange(loc, Material.GOLD_BLOCK.createBlockData());
-                    previewBlocks.add(loc);
-                }
-                
-                // Place gold adjacent to east corner
-                if (east) {
-                    Location loc = getSurface(world, endX - 1, endZ);
-                    player.sendBlockChange(loc, Material.GOLD_BLOCK.createBlockData());
-                    previewBlocks.add(loc);
-                }
-            }
-
-            // West edge (left)
-            if (west) {
-                // Place gold adjacent to north corner
-                if (north) {
-                    Location loc = getSurface(world, startX, startZ + 1);
-                    player.sendBlockChange(loc, Material.GOLD_BLOCK.createBlockData());
-                    previewBlocks.add(loc);
-                }
-                
-                // Place gold blocks every 8 blocks
-                for (int z = startZ + 8; z < endZ; z += 8) {
-                    Location loc = getSurface(world, startX, z);
-                    player.sendBlockChange(loc, Material.GOLD_BLOCK.createBlockData());
-                    previewBlocks.add(loc);
-                }
-                
-                // Place gold adjacent to south corner
-                if (south) {
-                    Location loc = getSurface(world, startX, endZ - 1);
-                    player.sendBlockChange(loc, Material.GOLD_BLOCK.createBlockData());
-                    previewBlocks.add(loc);
-                }
-            }
-
-            // East edge (right)
-            if (east) {
-                // Place gold adjacent to north corner
-                if (north) {
-                    Location loc = getSurface(world, endX, startZ + 1);
-                    player.sendBlockChange(loc, Material.GOLD_BLOCK.createBlockData());
-                    previewBlocks.add(loc);
-                }
-                
-                // Place gold blocks every 8 blocks
-                for (int z = startZ + 8; z < endZ; z += 8) {
-                    Location loc = getSurface(world, endX, z);
-                    player.sendBlockChange(loc, Material.GOLD_BLOCK.createBlockData());
-                    previewBlocks.add(loc);
-                }
-                
-                // Place gold adjacent to south corner
-                if (south) {
-                    Location loc = getSurface(world, endX, endZ - 1);
-                    player.sendBlockChange(loc, Material.GOLD_BLOCK.createBlockData());
-                    previewBlocks.add(loc);
-                }
             }
         }
 

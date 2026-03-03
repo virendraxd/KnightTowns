@@ -1,7 +1,7 @@
 package com.knightgost.knighttowns.utils;
 
-import com.knightgost.knighttowns.data.TownRank;
-import com.knightgost.knighttowns.data.TownPermission;
+import com.knightgost.knighttowns.model.TownRank;
+import com.knightgost.knighttowns.model.TownPermission;
 
 public class TownPerms {
 

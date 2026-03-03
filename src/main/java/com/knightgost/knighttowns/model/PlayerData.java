@@ -1,17 +1,19 @@
-package com.knightgost.knighttowns.service;
+package com.knightgost.knighttowns.model;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class PlayerData {
     private final UUID uuid;
     private int xp;
     private int level;
+    private BigDecimal balance;
 
     public PlayerData(UUID uuid) {
         this.uuid = uuid;
-        // When loaded/created, default to 0 XP and Lvl 1
         this.xp = 0;
         this.level = 1;
+        this.balance = BigDecimal.ZERO;
     }
 
     // Constructor for loading existing data
@@ -28,6 +30,8 @@ public class PlayerData {
     public int getXP() {
         return xp;
     }
+
+    public void setLevel(int level) { this.level = level; }
 
     public int getLevel() {
         return level;
@@ -53,4 +57,10 @@ public class PlayerData {
             // In a real plugin, you would save data and notify the player here.
         }
     }
+
+    // Balance methods
+    public BigDecimal getBalance() { return balance; }
+    public void setBalance(BigDecimal balance) { this.balance = balance; }
+    public void addBalance(BigDecimal amount) { this.balance = this.balance.add(amount); }
+    public void removeBalance(BigDecimal amount) { this.balance = this.balance.subtract(amount); }
 }

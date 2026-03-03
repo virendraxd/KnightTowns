@@ -1,50 +1,70 @@
 package com.knightgost.knighttowns;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
 import com.knightgost.knighttowns.commands.TownCommand;
-import com.knightgost.knighttowns.data.PlayerXPManager;
-import com.knightgost.knighttowns.data.TownBossBarManager;
-import com.knightgost.knighttowns.data.TownManager;
-import com.knightgost.knighttowns.listeners.TownProtectionListener;
-import com.knightgost.knighttowns.player.PlayerXPListener;
+import com.knightgost.knighttowns.gui.SellChestGUI;
+import com.knightgost.knighttowns.gui.ShopGUI;
+import com.knightgost.knighttowns.gui.TownGUI;
+import com.knightgost.knighttowns.listeners.*;
+import com.knightgost.knighttowns.manager.*;
+import com.knightgost.knighttowns.model.TownBossBarManager;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class KnightTowns extends JavaPlugin {
 
-    private static KnightTowns instance;
+    private ShopManager shopManager;
+    private CurrencyManager currencyManager;
     public TownBossBarManager bossBarManager;
 
     @Override
     public void onEnable() {
-        instance = this;
+        PlayerManager.init(this);
+        saveDefaultConfig();
 
-        // Setup player XP data and towns
+        currencyManager = new CurrencyManager();
+        shopManager = new ShopManager(getDataFolder());
+
+        TownGUI townGUI = new TownGUI(this, currencyManager);
+        ShopGUI shopGUI = new ShopGUI(this, shopManager, currencyManager);
+        SellChestGUI sellChestGUI = new SellChestGUI();
+
+        // =========================
+        // OTHER SETUP
+        // =========================
         PlayerXPManager.setup(this);
         TownManager.loadTownsFromFile(this);
         bossBarManager = new TownBossBarManager();
 
-        // Register the /town command
+        // =========================
+        // COMMANDS
+        // =========================
         if (getCommand("town") != null) {
-            getCommand("town").setExecutor(new TownCommand(this));
+            getCommand("town").setExecutor(
+                    new TownCommand(this,
+                            townGUI,
+                            shopGUI,
+                            sellChestGUI));
         } else {
             getLogger().warning("Town command not found in plugin.yml!");
         }
-        
-        // Register event listener for updating bossbar when players move
+
+        // Register Listeners
         getServer().getPluginManager().registerEvents(new PlayerXPListener(this), this);
-        getServer().getPluginManager().registerEvents(new TownProtectionListener(this), this);
-        // getServer().getPluginManager().registerEvents(new TownMoveListener(bossBarManager), this);
+        getServer().getPluginManager().registerEvents(new TownGUIListener(townGUI), this);
+        getServer().getPluginManager().registerEvents(new TownProtectionListener(), this);
+        getServer().getPluginManager().registerEvents(new ShopListener(shopManager, shopGUI, currencyManager), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        getServer().getPluginManager().registerEvents(new SellChestListener(shopManager, currencyManager), this);
 
         getLogger().info("KnightTowns has been enabled!");
     }
 
     @Override
     public void onDisable() {
+        PlayerManager.saveAll();
         getLogger().info("KnightTowns has been disabled!");
     }
 
-    // Static method to access plugin instance
-    public static KnightTowns getInstance() {
-        return instance;
+    public CurrencyManager getCurrencyManager() {
+        return currencyManager;
     }
 }

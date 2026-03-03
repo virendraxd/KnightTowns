@@ -1,4 +1,4 @@
-package com.knightgost.knighttowns.data;
+package com.knightgost.knighttowns.model;
 
 public enum TownRank {
     TOWNMASTER,

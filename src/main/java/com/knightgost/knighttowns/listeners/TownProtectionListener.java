@@ -14,11 +14,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import com.knightgost.knighttowns.data.Town;
-import com.knightgost.knighttowns.data.TownManager;
-import com.knightgost.knighttowns.data.TownRank;
+import com.knightgost.knighttowns.model.Town;
+import com.knightgost.knighttowns.manager.TownManager;
+import com.knightgost.knighttowns.model.TownRank;
 
 /**
  * Protects claimed town chunks from griefing.
@@ -28,31 +27,33 @@ import com.knightgost.knighttowns.data.TownRank;
  */
 public class TownProtectionListener implements Listener {
 
-    private final JavaPlugin plugin;
-
-    public TownProtectionListener(JavaPlugin plugin) {
-        this.plugin = plugin;
+    public TownProtectionListener() {
     }
 
     /**
      * Central permission check.
-     * Returns true if player is allowed to modify (place/break/interact) at the given location.
+     * Returns true if player is allowed to modify (place/break/interact) at the
+     * given location.
      */
     private boolean canModify(Player player, Location loc) {
         // OP bypass
-        if (player.isOp()) return true;
+        if (player.isOp())
+            return true;
 
         // Permission bypass
-        if (player.hasPermission("knighttowns.bypass")) return true;
+        if (player.hasPermission("knighttowns.bypass"))
+            return true;
 
         Town town = TownManager.getTownByLocation(loc);
-        if (town == null) return true; // not inside any town => allowed
+        if (town == null)
+            return true; // not inside any town => allowed
 
         UUID playerUUID = player.getUniqueId();
         TownRank rank = town.getRank(playerUUID);
 
         // Treat null rank as VISITOR
-        if (rank == null) rank = TownRank.VISITOR;
+        if (rank == null)
+            rank = TownRank.VISITOR;
 
         // Only ranks better than VISITOR may modify
         return rank != TownRank.VISITOR;
@@ -83,10 +84,12 @@ public class TownProtectionListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (event.getClickedBlock() == null) return;
+        if (event.getClickedBlock() == null)
+            return;
 
         Material type = event.getClickedBlock().getType();
-        if (!type.isInteractable()) return;
+        if (!type.isInteractable())
+            return;
 
         Location loc = event.getClickedBlock().getLocation();
         if (!canModify(player, loc)) {

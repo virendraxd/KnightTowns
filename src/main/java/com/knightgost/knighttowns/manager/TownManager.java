@@ -1,5 +1,7 @@
-package com.knightgost.knighttowns.data;
+package com.knightgost.knighttowns.manager;
 
+import com.knightgost.knighttowns.model.Town;
+import com.knightgost.knighttowns.model.TownRank;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -7,7 +9,6 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -20,7 +21,8 @@ public class TownManager {
     private static final Map<String, Town> towns = new HashMap<>();
 
     public static Town getTown(String name) {
-        if (name == null) return null;
+        if (name == null)
+            return null;
         return towns.get(name.toLowerCase());
     }
 
@@ -29,11 +31,13 @@ public class TownManager {
     }
 
     public static void addTown(Town town) {
-        if (town != null) towns.put(town.getName().toLowerCase(), town);
+        if (town != null)
+            towns.put(town.getName().toLowerCase(), town);
     }
 
     public static void removeTown(String name) {
-        if (name != null) towns.remove(name.toLowerCase());
+        if (name != null)
+            towns.remove(name.toLowerCase());
     }
 
     public static Collection<Town> getAllTowns() {
@@ -53,6 +57,7 @@ public class TownManager {
     /**
      * Calculates the town level based on its current size or resources.
      * * @param town The Town object.
+     * 
      * @return The calculated level (or 0 if the town is null).
      */
     public static int getTownLevel(Town town) {
@@ -61,9 +66,11 @@ public class TownManager {
         }
 
         // --- CUSTOM LEVELING LOGIC ---
-        // EXAMPLE: Level increases by 1 for every 5 members, starting at Level 1 for 1-4 members.
+        // EXAMPLE: Level increases by 1 for every 5 members, starting at Level 1 for
+        // 1-4 members.
         int population = town.getMembers().size();
-        if (population == 0) return 0;
+        if (population == 0)
+            return 0;
 
         // Formula: Level = (Population - 1) / 5 + 1
         return ((population - 1) / 5) + 1;
@@ -75,7 +82,8 @@ public class TownManager {
 
     // ===== Helper: get the town a player (by UUID) is mayor of =====
     public static Town getPlayerTown(UUID playerUUID) {
-        if (playerUUID == null) return null;
+        if (playerUUID == null)
+            return null;
         for (Town town : towns.values()) {
             if (playerUUID.equals(town.getMayorUUID())) {
                 return town;
@@ -84,18 +92,9 @@ public class TownManager {
         return null;
     }
 
-    public static Town getTownByMayor(UUID mayorUUID) {
-        if (mayorUUID == null) return null;
-        for (Town town : towns.values()) {
-            if (mayorUUID.equals(town.getMayorUUID())) {
-                return town;
-            }
-        }
-        return null;
-    }
-
     public static Town getTownByPlayer(UUID playerUUID) {
-        if (playerUUID == null) return null;
+        if (playerUUID == null)
+            return null;
 
         for (Town town : towns.values()) {
             if (town.getMembers().containsKey(playerUUID)) {
@@ -108,7 +107,8 @@ public class TownManager {
 
     // ===== Saving a town to file =====
     public static void saveTownToFile(JavaPlugin plugin, Town town) {
-        if (town == null || plugin == null) return;
+        if (town == null || plugin == null)
+            return;
 
         try {
             File file = new File(plugin.getDataFolder(), "towns.yml");
@@ -155,70 +155,68 @@ public class TownManager {
 
     // ===== Load all towns from file =====
     public static void loadTownsFromFile(JavaPlugin plugin) {
-
-        if (plugin == null) return;
+        if (plugin == null)
+            return;
 
         File file = new File(plugin.getDataFolder(), "towns.yml");
-        if (!file.exists()) return;
+        if (!file.exists())
+            return;
+
+        // ✅ CLEAR MEMORY FIRST
+        towns.clear();
 
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
         for (String townName : config.getKeys(false)) {
             String path = townName.toLowerCase();
 
-            // TownMaster UUID
             String townMasterStr = config.getString(path + ".townmaster");
             UUID townMasterUUID = null;
+
             if (townMasterStr != null && !townMasterStr.equals("none")) {
                 try {
                     townMasterUUID = UUID.fromString(townMasterStr);
-                } catch (IllegalArgumentException ignored) {}
+                } catch (IllegalArgumentException ignored) {
+                }
             }
 
-            // NOTE: Need TownRank enum for this part to work. Assuming it exists.
             Town town = new Town(townName, townMasterUUID);
 
-            // Load claimed chunks
-            List<String> chunkStrings = config.getStringList(path + ".claimedChunks");
-            for (String c : chunkStrings) {
+            // claimed chunks
+            for (String c : config.getStringList(path + ".claimedChunks")) {
                 String[] parts = c.split(",");
-                if (parts.length != 3) continue;
+                if (parts.length != 3)
+                    continue;
 
                 World world = Bukkit.getWorld(parts[0]);
-                if (world == null) continue;
+                if (world == null)
+                    continue;
 
                 try {
                     int x = Integer.parseInt(parts[1]);
                     int z = Integer.parseInt(parts[2]);
-                    Chunk chunk = world.getChunkAt(x, z);
-                    town.addClaimedChunk(chunk);
-                } catch (NumberFormatException ignored) {}
-            }
-
-            // Load members and ranks
-            ConfigurationSection membersSection = config.getConfigurationSection(path + ".members");
-            if (membersSection != null) {
-                for (String uuidStr : membersSection.getKeys(false)) {
-                    try {
-                        UUID uuid = UUID.fromString(uuidStr);
-                        // Assuming TownRank enum exists and is correctly imported/defined
-                        TownRank rank = TownRank.valueOf(membersSection.getString(uuidStr, "VISITOR"));
-                        town.addMember(uuid, rank);
-                    } catch (IllegalArgumentException ignored) {}
+                    town.addClaimedChunk(world.getChunkAt(x, z));
+                } catch (NumberFormatException ignored) {
                 }
             }
 
-            towns.put(townName.toLowerCase(), town);
+            // members
+            ConfigurationSection members = config.getConfigurationSection(path + ".members");
+            if (members != null) {
+                for (String uuidStr : members.getKeys(false)) {
+                    try {
+                        UUID uuid = UUID.fromString(uuidStr);
+                        TownRank rank = TownRank.valueOf(members.getString(uuidStr, "VISITOR"));
+                        town.addMember(uuid, rank);
+                    } catch (IllegalArgumentException ignored) {
+                    }
+                }
+            }
+
+            towns.put(path, town);
         }
 
-        plugin.getLogger().info("Loaded " + towns.size() + " towns from file.");
-    }
-
-    public static boolean isTownMaster(Player player, Town town) {
-        if (town == null || player == null) return false;
-        UUID playerUUID = player.getUniqueId();
-        UUID townMasterUUID = town.getTownMasterUUID(); // add getter in Town class
-        return playerUUID.equals(townMasterUUID);
+        plugin.getLogger().info("Loaded " + towns.size() + " towns.");
     }
 
     public static Town getTownByChunk(Chunk chunk) {
@@ -239,4 +237,30 @@ public class TownManager {
         }
         return null;
     }
+
+    public static void deleteTown(JavaPlugin plugin, String name) {
+        if (plugin == null || name == null)
+            return;
+
+        String key = name.toLowerCase();
+
+        // ✅ Remove from memory FIRST
+        towns.remove(key);
+
+        // ✅ Remove from file
+        File file = new File(plugin.getDataFolder(), "towns.yml");
+        if (!file.exists())
+            return;
+
+        FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+        config.set(key, null);
+
+        try {
+            config.save(file);
+        } catch (IOException e) {
+            plugin.getLogger().severe("Failed to delete town: " + key);
+            e.printStackTrace();
+        }
+    }
+
 }

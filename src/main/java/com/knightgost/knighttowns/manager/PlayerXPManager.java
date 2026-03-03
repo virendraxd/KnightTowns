@@ -1,4 +1,4 @@
-package com.knightgost.knighttowns.service;
+package com.knightgost.knighttowns.manager;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,12 +25,6 @@ public class PlayerXPManager {
             }
         }
         config = YamlConfiguration.loadConfiguration(file);
-    }
-
-    public static void savePlayer(UUID uuid, int xp, int level) {
-        config.set(uuid + ".xp", xp);
-        config.set(uuid + ".level", level);
-        saveFile();
     }
 
     public static int getXP(UUID uuid) {

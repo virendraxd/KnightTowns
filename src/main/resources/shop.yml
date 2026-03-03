@@ -1,0 +1,881 @@
+shop:
+  title: "§6§lKnightTowns Shop"
+  size: 36
+
+categories:
+  blocks:
+    name: "§fBlocks"
+    material: "GRASS_BLOCK"
+    slot: 11
+    lore:
+      - ""
+      - "§7Buy common and rare blocks"
+      - "§eClick to view!"
+
+  ores:
+    name: "§fOres"
+    material: "DIAMOND_ORE"
+    slot: 12
+    lore:
+      - ""
+      - "§7Precious ores and rare materials"
+      - "§eClick to view!"
+
+  farms:
+    name: "§fFarms"
+    material: "WHEAT"
+    slot: 13
+    lore:
+      - ""
+      - "§7Crops, seeds, and food supplies"
+      - "§eClick to view!"
+
+  foods:
+    name: "§fFoods"
+    material: "APPLE"
+    slot: 14
+    lore:
+      - ""
+      - "§7Food and Eatables"
+      - "§eClick to view!"
+
+  mobdrops:
+    name: "§fMob Drops"
+    material: "ROTTEN_FLESH"
+    slot: 15
+    lore:
+      - ""
+      - "§7Loot from various mobs"
+      - "§eClick to view!"
+
+  redstone:
+    name: "§fRedstone"
+    material: "REDSTONE"
+    slot: 20
+    lore:
+      - ""
+      - "§7Automation and machinery items"
+      - "§eClick to view!"
+
+  decorations:
+    name: "§fDecorations"
+    material: "PAINTING"
+    slot: 22
+    lore:
+      - ""
+      - "§7Aesthetic items for your builds"
+      - "§eClick to view!"
+
+  special:
+    name: "§fSpecial Items"
+    material: "NETHER_STAR"
+    slot: 24
+    lore:
+      - ""
+      - "§7Rare & unique magical items"
+      - "§eClick to view!"
+
+items:
+  blocks:
+    - material: "OAK_LOG"
+      name: "Oak Log"
+      buy: 4
+      sell: 1
+
+    - material: "SPRUCE_LOG"
+      name: "Spruce Log"
+      buy: 4
+      sell: 1
+
+    - material: "BIRCH_LOG"
+      name: "Birch Log"
+      buy: 4
+      sell: 1
+
+    - material: "JUNGLE_LOG"
+      name: "Jungle Log"
+      buy: 4
+      sell: 1
+
+    - material: "ACACIA_LOG"
+      name: "Acacia Log"
+      buy: 4
+      sell: 1
+
+    - material: "DARK_OAK_LOG"
+      name: "Dark Oak Log"
+      buy: 4
+      sell: 1
+
+    - material: "MANGROVE_LOG"
+      name: "Mangrove Log"
+      buy: 5
+      sell: 1
+
+    - material: "CHERRY_LOG"
+      name: "Cherry Log"
+      buy: 5
+      sell: 1
+
+    - material: "BAMBOO_BLOCK"
+      name: "Bamboo Block"
+      buy: 5
+      sell: 1
+
+    - material: "CRIMSON_STEM"
+      name: "Crimson Stem"
+      buy: 6
+      sell: 2
+
+    - material: "WARPED_STEM"
+      name: "Warped Stem"
+      buy: 6
+      sell: 2
+
+    - material: "STONE"
+      name: "Stone"
+      buy: 1
+      sell: 0
+
+    - material: "COBBLESTONE"
+      name: "Cobblestone"
+      buy: 1
+      sell: 0
+
+    - material: "ANDESITE"
+      name: "Andesite"
+      buy: 1
+      sell: 0
+
+    - material: "DIORITE"
+      name: "Diorite"
+      buy: 1
+      sell: 0
+
+    - material: "GRANITE"
+      name: "Granite"
+      buy: 1
+      sell: 0
+
+    - material: "TUFF"
+      name: "Tuff"
+      buy: 2
+      sell: 1
+
+    - material: "CALCITE"
+      name: "Calcite"
+      buy: 2
+      sell: 1
+
+    - material: "OBSIDIAN"
+      name: "Obsidian"
+      buy: 15
+      sell: 7
+
+    - material: "PUMPKIN"
+      name: "Pumpkin"
+      buy: 2
+      sell: 1
+
+    - material: "MELON"
+      name: "Melon"
+      buy: 2
+      sell: 1
+
+    - material: "CACTUS"
+      name: "Cactus"
+      buy: 2
+      sell: 1
+
+
+  ores:
+    - material: "EMERALD"
+      name: "Emerald"
+      buy: 40
+      sell: 20
+
+    - material: "DIAMOND"
+      name: "Diamond"
+      buy: 35
+      sell: 18
+
+    - material: "NETHERITE_SCRAP"
+      name: "Netherite Scrap"
+      buy: 70
+      sell: 35
+
+    - material: "GOLD_INGOT"
+      name: "Gold Ingot"
+      buy: 18
+      sell: 9
+
+    - material: "IRON_INGOT"
+      name: "Iron Ingot"
+      buy: 15
+      sell: 7
+
+    - material: "LAPIS_LAZULI"
+      name: "Lapis Lazuli"
+      buy: 12
+      sell: 6
+
+    - material: "REDSTONE"
+      name: "Redstone Dust"
+      buy: 10
+      sell: 5
+
+    - material: "COPPER_INGOT"
+      name: "Copper Ingot"
+      buy: 8
+      sell: 4
+
+    - material: "COAL"
+      name: "Coal"
+      buy: 6
+      sell: 3
+
+  farms:
+#      Basic Crops & Seeds
+    - material: "WHEAT"
+      name: "Wheat"
+      buy: 10
+      sell: 2
+
+#    - material: "WHEAT_SEEDS"
+#      name: "Wheat Seeds"
+#      buy: 2
+#      sell: 0
+
+#    - material: "CARROT"
+#      name: "Carrot"
+#      buy: 10
+#      sell: 2
+#
+#    - material: "POTATO"
+#      name: "Potato"
+#      buy: 10
+#      sell: 2
+#
+#    - material: "BEETROOT"
+#      name: "Beetroot"
+#      buy: 10
+#      sell: 2
+
+#    - material: "BEETROOT_SEEDS"
+#      name: "Beetroot Seeds"
+#      buy: 2
+#      sell: 0
+
+    # Utility & Cash Crops
+    - material: "SUGAR_CANE"
+      name: "Sugar Cane"
+      buy: 20
+      sell: 4
+
+    - material: "BAMBOO"
+      name: "Bamboo"
+      buy: 15
+      sell: 3
+
+    - material: "KELP"
+      name: "Kelp"
+      buy: 5
+      sell: 1
+
+    - material: "CACTUS"
+      name: "Cactus"
+      buy: 15
+      sell: 3
+
+    - material: "PUMPKIN"
+      name: "Pumpkin"
+      buy: 25
+      sell: 5
+
+    - material: "MELON"
+      name: "Melon"
+      buy: 25
+      sell: 5
+
+    # Fruits & Special Farming
+#    - material: "MELON_SLICE"
+#      name: "Melon Slice"
+#      buy: 5
+#      sell: 1
+#
+#    - material: "MELON_SEEDS"
+#      name: "Melon Seeds"
+#      buy: 10
+#      sell: 0
+
+#    - material: "PUMPKIN_SEEDS"
+#      name: "Pumpkin Seeds"
+#      buy: 10
+#      sell: 0
+
+    - material: "COCOA_BEANS"
+      name: "Cocoa Beans"
+      buy: 15
+      sell: 3
+
+#    - material: "SWEET_BERRIES"
+#      name: "Sweet Berries"
+#      buy: 10
+#      sell: 2
+#
+#    - material: "GLOW_BERRIES"
+#      name: "Glow Berries"
+#      buy: 20
+#      sell: 4
+
+    # Mushrooms & Nether Farming
+    - material: "NETHER_WART"
+      name: "Nether Wart"
+      buy: 30
+      sell: 6
+
+    - material: "RED_MUSHROOM"
+      name: "Red Mushroom"
+      buy: 10
+      sell: 2
+
+    - material: "BROWN_MUSHROOM"
+      name: "Brown Mushroom"
+      buy: 10
+      sell: 2
+
+#    - material: "CHORUS_FRUIT"
+#      name: "Chorus Fruit"
+#      buy: 40
+#      sell: 8
+
+    # Saplings (Tree Farming)
+    - material: "OAK_SAPLING"
+      name: "Oak Sapling"
+      buy: 50
+      sell: 5
+
+    - material: "SPRUCE_SAPLING"
+      name: "Spruce Sapling"
+      buy: 50
+      sell: 5
+
+    - material: "BIRCH_SAPLING"
+      name: "Birch Sapling"
+      buy: 50
+      sell: 5
+
+    - material: "JUNGLE_SAPLING"
+      name: "Jungle Sapling"
+      buy: 50
+      sell: 5
+
+    - material: "ACACIA_SAPLING"
+      name: "Acacia Sapling"
+      buy: 50
+      sell: 5
+
+    - material: "DARK_OAK_SAPLING"
+      name: "Dark Oak Sapling"
+      buy: 50
+      sell: 5
+
+    - material: "CHERRY_SAPLING"
+      name: "Cherry Sapling"
+      buy: 75
+      sell: 10
+
+    - material: "MANGROVE_PROPAGULE"
+      name: "Mangrove Propagule"
+      buy: 75
+      sell: 10
+
+    # Mob Farming Essentials
+
+
+
+  foods:
+    - material: "COOKED_PORKCHOP"
+      name: "Cooked Porkchop"
+      buy: 60
+      sell: 12
+
+    - material: "COOKED_MUTTON"
+      name: "Cooked Mutton"
+      buy: 60
+      sell: 12
+
+    - material: "COOKED_CHICKEN"
+      name: "Cooked Chicken"
+      buy: 60
+      sell: 12
+
+    - material: "COOKED_RABBIT"
+      name: "Cooked Rabbit"
+      buy: 60
+      sell: 12
+
+    - material: "COOKED_COD"
+      name: "Cooked Cod"
+      buy: 60
+      sell: 12
+
+    - material: "COOKED_SALMON"
+      name: "Cooked Salmon"
+      buy: 60
+      sell: 12
+
+    - material: "EGG"
+      name: "Egg"
+      buy: 10
+      sell: 0
+
+    - material: "PUFFERFISH"
+      name: "Pufferfish"
+      buy: 30
+      sell: 6
+
+    - material: "HONEY_BOTTLE"
+      name: "Honey Bottle"
+      buy: 40
+      sell: 8
+
+    - material: "MILK_BUCKET"
+      name: "Milk Bucket"
+      buy: 50
+      sell: 10
+
+    - material: "POTION"
+      name: "Bottle of Water"
+      buy: 5
+      sell: 1
+
+    - material: "RABBIT"
+      name: "Raw Rabbit"
+      buy: 20
+      sell: 4
+
+    - material: "COD"
+      name: "Raw Cod"
+      buy: 18
+      sell: 3
+
+    - material: "SALMON"
+      name: "Raw Salmon"
+      buy: 20
+      sell: 4
+
+    - material: "BREAD"
+      name: "Bread"
+      buy: 15
+      sell: 3
+
+    - material: "POTATO"
+      name: "Potato"
+      buy: 8
+      sell: 1
+
+    - material: "CARROT"
+      name: "Carrot"
+      buy: 10
+      sell: 2
+
+    - material: "BEETROOT"
+      name: "Beetroot"
+      buy: 6
+      sell: 1
+
+    - material: "APPLE"
+      name: "Apple"
+      buy: 12
+      sell: 2
+
+    - material: "SWEET_BERRIES"
+      name: "Sweet Berries"
+      buy: 10
+      sell: 2
+
+    - material: "GLOW_BERRIES"
+      name: "Glow Berries"
+      buy: 16
+      sell: 3
+
+    - material: "CHORUS_FRUIT"
+      name: "Chorus Fruit"
+      buy: 40
+      sell: 8
+
+    - material: "MELON_SLICE"
+      name: "Melon Slice"
+      buy: 5
+      sell: 1
+
+    - material: "PUMPKIN_PIE"
+      name: "Pie"
+      buy: 40
+      sell: 8
+
+    - material: "COOKIE"
+      name: "Cookie"
+      buy: 6
+      sell: 1
+
+    - material: "CAKE"
+      name: "Cake"
+      buy: 150
+      sell: 30
+
+    - material: "GOLDEN_CARROT"
+      name: "Golden Carrot"
+      buy: 80
+      sell: 16
+
+    - material: "GOLDEN_APPLE"
+      name: "Golden Apple"
+      buy: 200
+      sell: 40
+
+    - material: "DRIED_KELP"
+      name: "Dried Kelp"
+      buy: 4
+      sell: 1
+
+
+  mobdrops:
+    - material: "ROTTEN_FLESH"
+      name: "Rotten Flesh"
+      buy: 2
+      sell: 1
+
+    - material: "LEATHER"
+      name: "Leather"
+      buy: 30
+      sell: 5
+
+    - material: "BONE"
+      name: "Bone"
+      buy: 10
+      sell: 2
+
+    - material: "STRING"
+      name: "String"
+      buy: 12
+      sell: 3
+
+    - material: "SPIDER_EYE"
+      name: "Spider Eye"
+      buy: 15
+      sell: 4
+
+    - material: "GUNPOWDER"
+      name: "Gunpowder"
+      buy: 25
+      sell: 8
+
+    - material: "ENDER_PEARL"
+      name: "Ender Pearl"
+      buy: 120
+      sell: 25
+
+    - material: "BLAZE_ROD"
+      name: "Blaze Rod"
+      buy: 150
+      sell: 35
+
+    - material: "SLIME_BALL"
+      name: "Slime Ball"
+      buy: 40
+      sell: 10
+
+    - material: "MAGMA_CREAM"
+      name: "Magma Cream"
+      buy: 60
+      sell: 15
+
+    - material: "PHANTOM_MEMBRANE"
+      name: "Phantom Membrane"
+      buy: 90
+      sell: 20
+
+    - material: "RABBIT_FOOT"
+      name: "Rabbit Foot"
+      buy: 120
+      sell: 30
+
+    - material: "RABBIT_HIDE"
+      name: "Rabbit Hide"
+      buy: 25
+      sell: 6
+
+    - material: "FEATHER"
+      name: "Feather"
+      buy: 10
+      sell: 2
+
+    - material: "INK_SAC"
+      name: "Ink Sac"
+      buy: 12
+      sell: 3
+
+    - material: "GHAST_TEAR"
+      name: "Ghast Tear"
+      buy: 300
+      sell: 80
+
+
+
+  redstone:
+    - material: "REDSTONE"
+      name: "Redstone Dust"
+      buy: 6
+      sell: 3
+
+    - material: "REDSTONE_TORCH"
+      name: "Redstone Torch"
+      buy: 20
+      sell: 6
+
+    - material: "REPEATER"
+      name: "Redstone Repeater"
+      buy: 45
+      sell: 15
+
+    - material: "COMPARATOR"
+      name: "Redstone Comparator"
+      buy: 65
+      sell: 22
+
+    - material: "PISTON"
+      name: "Piston"
+      buy: 90
+      sell: 30
+
+    - material: "STICKY_PISTON"
+      name: "Sticky Piston"
+      buy: 140
+      sell: 45
+
+    - material: "OBSERVER"
+      name: "Observer"
+      buy: 120
+      sell: 40
+
+    - material: "HOPPER"
+      name: "Hopper"
+      buy: 220
+      sell: 75
+
+    - material: "DISPENSER"
+      name: "Dispenser"
+      buy: 110
+      sell: 35
+
+    - material: "DROPPER"
+      name: "Dropper"
+      buy: 95
+      sell: 30
+
+    - material: "NOTE_BLOCK"
+      name: "Note Block"
+      buy: 80
+      sell: 25
+
+    - material: "LEVER"
+      name: "Lever"
+      buy: 10
+      sell: 3
+
+    - material: "STONE_BUTTON"
+      name: "Stone Button"
+      buy: 8
+      sell: 2
+
+    - material: "DAYLIGHT_DETECTOR"
+      name: "Daylight Detector"
+      buy: 180
+      sell: 60
+
+    - material: "TARGET"
+      name: "Target Block"
+      buy: 70
+      sell: 20
+
+
+
+  decorations:
+    - material: "MANGROVE_ROOTS"
+      name: "Mangrove Roots"
+      buy: 2
+      sell: 1
+
+    - material: "CHEST"
+      name: "Chest"
+      buy: 5
+      sell: 2
+
+    - material: "BARREL"
+      name: "Barrel"
+      buy: 5
+      sell: 2
+
+    - material: "LANTERN"
+      name: "Lantern"
+      buy: 18
+      sell: 6
+
+    - material: "SOUL_LANTERN"
+      name: "Soul Lantern"
+      buy: 20
+      sell: 7
+
+    - material: "CANDLE"
+      name: "Candle"
+      buy: 6
+      sell: 2
+
+    - material: "FLOWER_POT"
+      name: "Flower Pot"
+      buy: 10
+      sell: 3
+
+    - material: "BOOKSHELF"
+      name: "Bookshelf"
+      buy: 25
+      sell: 8
+
+    - material: "PAINTING"
+      name: "Painting"
+      buy: 15
+      sell: 5
+
+    - material: "ITEM_FRAME"
+      name: "Item Frame"
+      buy: 12
+      sell: 4
+
+    - material: "GLOW_ITEM_FRAME"
+      name: "Glow Item Frame"
+      buy: 30
+      sell: 10
+
+    - material: "ARMOR_STAND"
+      name: "Armor Stand"
+      buy: 20
+      sell: 7
+
+    - material: "BELL"
+      name: "Bell"
+      buy: 80
+      sell: 25
+
+    - material: "LECTERN"
+      name: "Lectern"
+      buy: 35
+      sell: 12
+
+    - material: "COMPOSTER"
+      name: "Composter"
+      buy: 12
+      sell: 4
+
+    - material: "JUKEBOX"
+      name: "Jukebox"
+      buy: 120
+      sell: 40
+
+    - material: "SMOKER"
+      name: "Smoker"
+      buy: 45
+      sell: 15
+
+    - material: "BLAST_FURNACE"
+      name: "Blast Furnace"
+      buy: 60
+      sell: 20
+
+
+
+  special:
+    - material: "SPAWNER"
+      name: "Mob Spawner"
+      buy: 50
+      sell: 25
+
+    # ---------- PvP GEAR ----------
+    - material: "TOTEM_OF_UNDYING"
+      name: "Totem of Undying"
+      buy: 180
+      sell: 60
+
+    - material: "ENDER_PEARL"
+      name: "Ender Pearl"
+      buy: 20
+      sell: 6
+
+    - material: "SHIELD"
+      name: "Shield"
+      buy: 40
+      sell: 15
+
+    - material: "CROSSBOW"
+      name: "Crossbow"
+      buy: 65
+      sell: 20
+
+    - material: "TRIDENT"
+      name: "Trident"
+      buy: 450
+      sell: 150
+
+    # ---------- COMBAT CONSUMABLES ----------
+    - material: "GOLDEN_APPLE"
+      name: "Golden Apple"
+      buy: 120
+      sell: 40
+
+    - material: "ENCHANTED_GOLDEN_APPLE"
+      name: "Enchanted Golden Apple"
+      buy: 1200
+      sell: 400
+
+    - material: "SPLASH_POTION"
+      name: "Splash Potion"
+      buy: 90
+      sell: 30
+
+    - material: "LINGERING_POTION"
+      name: "Lingering Potion"
+      buy: 140
+      sell: 45
+
+    # ---------- UTILITY / TACTICAL ----------
+    - material: "TNT"
+      name: "TNT"
+      buy: 35
+      sell: 12
+
+    - material: "OBSIDIAN"
+      name: "Obsidian"
+      buy: 25
+      sell: 8
+
+    - material: "RESPAWN_ANCHOR"
+      name: "Respawn Anchor"
+      buy: 160
+      sell: 55
+
+    - material: "CRYING_OBSIDIAN"
+      name: "Crying Obsidian"
+      buy: 35
+      sell: 12
+
+    - material: "ENDER_CHEST"
+      name: "Ender Chest"
+      buy: 90
+      sell: 30
+
+    - material: "TRIDENT"
+      name: "GOD's Weapon"
+      buy: 10101010101010
+      sell: 55
+

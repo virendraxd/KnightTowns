@@ -1,9 +1,11 @@
-package com.knightgost.knighttowns.service;
+package com.knightgost.knighttowns.listeners;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import com.knightgost.knighttowns.manager.PlayerXPManager;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -15,12 +17,9 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PlayerXPListener implements Listener {
-
-    private final JavaPlugin plugin;
     private final Set<String> placedBlocks = new HashSet<>();
 
     public PlayerXPListener(JavaPlugin plugin) {
-        this.plugin = plugin;
     }
 
     @EventHandler
@@ -54,22 +53,20 @@ public class PlayerXPListener implements Listener {
             case LAPIS_ORE, DEEPSLATE_LAPIS_ORE -> 8;
             case REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE -> 6;
             case COPPER_ORE, DEEPSLATE_COPPER_ORE -> 4;
-            case COAL_ORE, DEEPSLATE_COAL_ORE -> 3;
+            case COAL_ORE, DEEPSLATE_COAL_ORE, CRIMSON_STEM, WARPED_STEM, HAY_BLOCK -> 3;
 
             // Overworld mining blocks
             case STONE, COBBLESTONE, ANDESITE, DIORITE, GRANITE -> 1;
             case OBSIDIAN -> 15;
-            case TUFF, CALCITE -> 2;
+            case TUFF, CALCITE, PUMPKIN, MELON, CACTUS, BAMBOO, MANGROVE_ROOTS -> 2;
 
             // Logs and woods
-            case OAK_LOG, SPRUCE_LOG, BIRCH_LOG, JUNGLE_LOG, ACACIA_LOG,
-                 DARK_OAK_LOG, CHERRY_LOG, MANGROVE_LOG, BAMBOO_BLOCK -> 2;
-            case CRIMSON_STEM, WARPED_STEM -> 3;
+            case OAK_LOG, SPRUCE_LOG, BIRCH_LOG, JUNGLE_LOG, ACACIA_LOG, DARK_OAK_LOG, CHERRY_LOG, MANGROVE_LOG,
+                    BAMBOO_BLOCK ->
+                2;
 
             // Farming
             case WHEAT, CARROTS, POTATOES, BEETROOTS, SUGAR_CANE -> 1;
-            case PUMPKIN, MELON, CACTUS, BAMBOO, MANGROVE_ROOTS -> 2;
-            case HAY_BLOCK -> 3;
 
             // Adventure
             case CHEST, BARREL -> 5;
@@ -85,14 +82,13 @@ public class PlayerXPListener implements Listener {
             PlayerXPManager.addXP(uuid, xp);
             int newLevel = PlayerXPManager.getLevel(uuid);
 
-            player.sendActionBar("§a+" + xp + " XP §7| Level " + newLevel);
+            player.sendActionBar(Component.text("§a+" + xp + " XP §7| Level " + newLevel));
 
             if (newLevel > oldLevel) {
                 player.sendMessage("§6§lLEVEL UP! §eYou are now Level " + newLevel + "!");
             }
         }
     }
-
 
     @EventHandler
     public void onPlayerKill(PlayerDeathEvent e) {
@@ -104,7 +100,7 @@ public class PlayerXPListener implements Listener {
             PlayerXPManager.addXP(uuid, 50);
             int newLevel = PlayerXPManager.getLevel(uuid);
 
-            killer.sendActionBar("§a+50 XP §7(Kill) | Level " + newLevel);
+            killer.sendActionBar(Component.text("§a+50 XP §7(Kill) | Level " + newLevel));
 
             if (newLevel > oldLevel) {
                 killer.sendMessage("§6§lLEVEL UP! §eYou are now Level " + newLevel + "!");

@@ -1,10 +1,11 @@
 package com.knightgost.knighttowns.listeners;
 
+import com.knightgost.knighttowns.manager.TownManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.entity.Player;
-import com.knightgost.knighttowns.data.*;
+import com.knightgost.knighttowns.model.*;
 
 
 public class TownMoveListener implements Listener {

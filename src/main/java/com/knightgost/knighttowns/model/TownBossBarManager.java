@@ -1,4 +1,4 @@
-package com.knightgost.knighttowns.data;
+package com.knightgost.knighttowns.model;
 
 import java.util.HashMap;
 import java.util.HashSet;
