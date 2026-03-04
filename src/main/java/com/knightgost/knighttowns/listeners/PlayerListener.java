@@ -22,7 +22,7 @@ public class PlayerListener implements Listener {
 
         Player player = event.getPlayer();
 
-        if (player.hasPermission("knighttowns.admin")) {
+        if (player.isOp()) {
             updateChecker.notifyPlayer(player);
         }
     }
