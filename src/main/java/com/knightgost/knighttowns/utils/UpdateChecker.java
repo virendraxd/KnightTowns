@@ -29,8 +29,7 @@ public class UpdateChecker {
                 connection.setReadTimeout(5000);
 
                 BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(connection.getInputStream())
-                );
+                        new InputStreamReader(connection.getInputStream()));
 
                 latestVersion = reader.readLine().trim();
                 reader.close();
@@ -38,14 +37,8 @@ public class UpdateChecker {
                 String currentVersion = plugin.getPluginMeta().getVersion();
 
                 if (!currentVersion.equalsIgnoreCase(latestVersion)) {
-
-                    Bukkit.getConsoleSender().sendMessage("§8§m----------------------------------------");
-                    Bukkit.getConsoleSender().sendMessage("§6[KnightTowns] §eUpdate available!");
-                    Bukkit.getConsoleSender().sendMessage("§7Current: §c" + currentVersion);
-                    Bukkit.getConsoleSender().sendMessage("§7Latest: §a" + latestVersion);
-                    Bukkit.getConsoleSender().sendMessage("§bDownload: §9https://github.com/virendraxd/KnightTowns");
-                    Bukkit.getConsoleSender().sendMessage("§8§m----------------------------------------");
-
+                    plugin.getLogger().warning("[KnightTowns] A new version " + latestVersion
+                    + " is available, you are running " + currentVersion);
                 }
 
             } catch (Exception ignored) {
@@ -56,17 +49,14 @@ public class UpdateChecker {
 
     public void notifyPlayer(Player player) {
 
-        if (latestVersion == null) return;
+        if (latestVersion == null)
+            return;
 
         String currentVersion = plugin.getPluginMeta().getVersion();
 
         if (!currentVersion.equalsIgnoreCase(latestVersion)) {
-
-            player.sendMessage("§8§m----------------------------------------");
-            player.sendMessage("§6§l[KnightTowns] §r§eA new version (§a" + latestVersion + "§e) is available!");
-            player.sendMessage("§7You are running §c" + currentVersion);
-            player.sendMessage("§bDownload: §9https://github.com/virendraxd/KnightTowns");
-            player.sendMessage("§8§m----------------------------------------");
+            player.sendMessage("§6§l[KnightTowns] §6A new version " + latestVersion
+                    + " is available, you are running " + currentVersion);
         }
     }
 }
