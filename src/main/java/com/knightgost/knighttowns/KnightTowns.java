@@ -7,6 +7,7 @@ import com.knightgost.knighttowns.gui.TownGUI;
 import com.knightgost.knighttowns.listeners.*;
 import com.knightgost.knighttowns.manager.*;
 import com.knightgost.knighttowns.model.TownBossBarManager;
+import com.knightgost.knighttowns.utils.UpdateChecker;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class KnightTowns extends JavaPlugin {
@@ -19,6 +20,12 @@ public class KnightTowns extends JavaPlugin {
     public void onEnable() {
         PlayerManager.init(this);
         saveDefaultConfig();
+
+        // version checker
+        String versionURL = "https://raw.githubusercontent.com/virendraxd/KnightTowns/main/version.txt";
+
+        UpdateChecker updateChecker = new UpdateChecker(this, versionURL);
+        updateChecker.checkForUpdates();
 
         currencyManager = new CurrencyManager();
         shopManager = new ShopManager(getDataFolder());
@@ -52,7 +59,7 @@ public class KnightTowns extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new TownGUIListener(townGUI), this);
         getServer().getPluginManager().registerEvents(new TownProtectionListener(), this);
         getServer().getPluginManager().registerEvents(new ShopListener(shopManager, shopGUI, currencyManager), this);
-        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(updateChecker), this);
         getServer().getPluginManager().registerEvents(new SellChestListener(shopManager, currencyManager), this);
 
         getLogger().info("KnightTowns has been enabled!");
