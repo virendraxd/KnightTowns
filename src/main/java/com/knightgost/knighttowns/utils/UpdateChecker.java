@@ -37,7 +37,7 @@ public class UpdateChecker {
                 String currentVersion = plugin.getPluginMeta().getVersion();
 
                 if (!currentVersion.equalsIgnoreCase(latestVersion)) {
-                    plugin.getLogger().warning("[KnightTowns] A new version " + latestVersion
+                    plugin.getLogger().warning("A new version " + latestVersion
                     + " is available, you are running " + currentVersion);
                 }
 
