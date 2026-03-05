@@ -19,6 +19,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import com.knightgost.knighttowns.KnightTowns;
 import com.knightgost.knighttowns.model.Town;
+import com.knightgost.knighttowns.manager.RaidManager;
+import com.knightgost.knighttowns.model.RaidDifficulty;
 import com.knightgost.knighttowns.manager.TownManager;
 import com.knightgost.knighttowns.model.TownRank;
 import com.knightgost.knighttowns.utils.BorderUtils;
@@ -31,6 +33,7 @@ public class TownCommand implements CommandExecutor {
     private final TownGUI townGUI;
     private final ShopGUI shopGUI;
     private final SellChestGUI sellChestGUI;
+    private final RaidManager raidManager;
 
     // private final Map<String, Town> towns = new HashMap<>();
 
@@ -41,11 +44,13 @@ public class TownCommand implements CommandExecutor {
             KnightTowns plugin,
             TownGUI townGUI,
             ShopGUI shopGUI,
-            SellChestGUI sellChestGUI) {
+            SellChestGUI sellChestGUI,
+            RaidManager raidManager) {
         this.plugin = plugin;
         this.townGUI = townGUI;
         this.shopGUI = shopGUI;
         this.sellChestGUI = sellChestGUI;
+        this.raidManager = raidManager;
 
         this.currencyHandler = new CurrencyCommandHandler(plugin.getCurrencyManager());
         this.currencyAdminHandler = new CurrencyAdminHandler(plugin.getCurrencyManager());
@@ -82,6 +87,7 @@ public class TownCommand implements CommandExecutor {
             case "gui", "menu", "profile" -> townGUI.open(player);
             case "shop" -> shopGUI.open(player);
             case "sell" -> sellChestGUI.open(player);
+            case "raid" -> handleRaid(player, args);
             // case "reloadshop" -> {
             // shopConfig.reload();
             // player.sendMessage("§aShop reloaded!");
@@ -141,6 +147,7 @@ public class TownCommand implements CommandExecutor {
         sender.sendMessage("§e/town removemember <player> §7- Remove a player from your town (Mayor/TownMaster only)");
         sender.sendMessage("§e/town shop §7- Open town shop menu.");
         sender.sendMessage("§e/town sell §7- Open sell menu gui.");
+        sender.sendMessage("§e/town raid §7- Show raid options.");
         // sender.sendMessage("§e/town togglebossbar §7- Toggle the town border bossbar
         // display");
     }
@@ -578,6 +585,67 @@ public class TownCommand implements CommandExecutor {
         player.sendMessage("§7Claimed Chunks: §a" + town.getClaimedChunks().size());
         player.sendMessage("§7Created On: §f" + town.getCreationDate());
         player.sendMessage("§8§m------------------------------");
+    }
+
+    private void handleRaid(Player player, String[] args) {
+        if (!player.isOp()) {
+            player.sendMessage("§cOnly Server Operators can manage raids manually!");
+            return;
+        }
+
+        if (args.length < 2) {
+            player.sendMessage("§eUsage: /town raid <start|stop|stopall> [town_name] [difficulty]");
+            return;
+        }
+
+        String subCommand = args[1].toLowerCase();
+
+        if (subCommand.equals("stopall")) {
+            raidManager.forceStopAll();
+            player.sendMessage("§aAll active raids have been forcefully stopped.");
+            return;
+        }
+
+        Town town = null;
+        if (args.length >= 3) {
+            town = TownManager.getTown(args[2]);
+        }
+
+        if (town == null) {
+            town = TownManager.getTownByPlayer(player.getUniqueId());
+        }
+
+        if (town == null) {
+            player.sendMessage("§cYou must specify a town or be inside a town to do this!");
+            return;
+        }
+
+        if (subCommand.equals("start")) {
+            RaidDifficulty difficulty = RaidDifficulty.EASY;
+            if (args.length >= 4) {
+                try {
+                    difficulty = RaidDifficulty.valueOf(args[3].toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    player.sendMessage("§cInvalid difficulty! Use: Easy, Normal, Hard. Defaulting to Easy.");
+                }
+            } else if (args.length == 3) {
+                // Try parsing the 3rd arg as difficulty if it wasn't a town
+                try {
+                    difficulty = RaidDifficulty.valueOf(args[2].toUpperCase());
+                    town = TownManager.getTownByPlayer(player.getUniqueId());
+                } catch (IllegalArgumentException ignored) {
+                }
+            }
+
+            raidManager.startRaid(town, difficulty);
+            player.sendMessage("§aStarted a " + difficulty.name() + " raid for town " + town.getName());
+
+        } else if (subCommand.equals("stop")) {
+            raidManager.forceStop(town);
+            player.sendMessage("§aForce stopped the raid for town: " + town.getName());
+        } else {
+            player.sendMessage("§cUnknown raid command. Use start, stop or stopall.");
+        }
     }
 
 }

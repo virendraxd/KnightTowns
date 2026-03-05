@@ -14,12 +14,16 @@ public class KnightTowns extends JavaPlugin {
 
     private ShopManager shopManager;
     private CurrencyManager currencyManager;
+    private RaidManager raidManager;
     public TownBossBarManager bossBarManager;
 
     @Override
     public void onEnable() {
         PlayerManager.init(this);
+
         saveDefaultConfig();
+        getConfig().options().copyDefaults(true);
+        saveConfig();
 
         // version checker
         String versionURL = "https://raw.githubusercontent.com/virendraxd/KnightTowns/main/version.txt";
@@ -29,6 +33,7 @@ public class KnightTowns extends JavaPlugin {
 
         currencyManager = new CurrencyManager();
         shopManager = new ShopManager(getDataFolder());
+        raidManager = new RaidManager(this);
 
         TownGUI townGUI = new TownGUI(this, currencyManager);
         ShopGUI shopGUI = new ShopGUI(this, shopManager, currencyManager);
@@ -49,7 +54,8 @@ public class KnightTowns extends JavaPlugin {
                     new TownCommand(this,
                             townGUI,
                             shopGUI,
-                            sellChestGUI));
+                            sellChestGUI,
+                            raidManager));
         } else {
             getLogger().warning("Town command not found in plugin.yml!");
         }
@@ -61,6 +67,7 @@ public class KnightTowns extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ShopListener(shopManager, shopGUI, currencyManager), this);
         getServer().getPluginManager().registerEvents(new PlayerListener(updateChecker), this);
         getServer().getPluginManager().registerEvents(new SellChestListener(shopManager, currencyManager), this);
+        getServer().getPluginManager().registerEvents(new RaidListener(raidManager), this);
 
         getLogger().info("KnightTowns has been enabled!");
     }
@@ -73,5 +80,9 @@ public class KnightTowns extends JavaPlugin {
 
     public CurrencyManager getCurrencyManager() {
         return currencyManager;
+    }
+
+    public RaidManager getRaidManager() {
+        return raidManager;
     }
 }

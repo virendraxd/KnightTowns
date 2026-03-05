@@ -1,0 +1,9 @@
+# KnightTowns Main Configuration File
+
+raids:
+  # Whether random raids are enabled
+  enabled: true
+  
+  # How often a random raid should attempt to start
+  # 144000 ticks = 2 real hours = 6 minecraft days
+  interval_ticks: 144000
